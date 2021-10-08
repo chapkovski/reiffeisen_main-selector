@@ -1,0 +1,29 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Page title
+{% endblock %}
+
+
+{% block body_main %}
+    <link rel="stylesheet" href="{% static 'front/css/chunk-vendors.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/main.css' %}">
+    <form action='' method="post" role="form" id="form" autocomplete="off">
+        {% csrf_token %}
+        <script>
+            window.drawdown = {{ player.get_drawdown|json }};
+            window.data = {{ player.get_data|json }};
+            window.componentNumber = {{session.config.component_number}};
+            window.socket_path = {{ view.live_url|json }};
+            window.innerSlider = {{session.config.inner_slider|default_if_none:False|json}};
+        </script>
+        <div id="app"></div>
+        <script type="text/javascript" src="{% static 'front/js/chunk-vendors.js' %}"></script>
+        <script type="text/javascript" src="{% static 'front/js/main.js' %}"></script>
+    </form>
+
+{% endblock %}
+
+{% block live %}
+{% endblock %}

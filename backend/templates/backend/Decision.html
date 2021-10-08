@@ -1,0 +1,29 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Page title
+{% endblock %}
+
+
+{% block body_main %}
+ 
+    <link rel="stylesheet" href="{% static 'front/css/chunk-vendors.css' %}">
+    <link rel="stylesheet" href="{% static 'front/css/selector.css' %}">
+    <script>
+    window.data={{ data|json }}
+    </script>
+    <form action='' method="post" role="form" id="form" autocomplete="off">
+        {% csrf_token %}
+        <script>
+
+        </script>
+        <div id="app"></div>
+        <script type="text/javascript" src="{% static 'front/js/chunk-vendors.js' %}"></script>
+        <script type="text/javascript" src="{% static 'front/js/selector.js' %}"></script>
+    </form>
+
+{% endblock %}
+
+{% block live %}
+{% endblock %}
