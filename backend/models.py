@@ -59,7 +59,7 @@ class Player(BasePlayer):
     drawdown = models.FloatField(min=2, max=4, initial=3)
     data = models.LongStringField()
     current_position = models.IntegerField(initial=1)
-
+    exit_price=models.FloatField()
     def chart_generator(self, vol):
         sizesam = (Constants.steps1, 50)
         dift = Constants.T / Constants.steps1

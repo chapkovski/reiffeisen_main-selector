@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <input type="hidden" :value="newPrice" name="exit_price" />
     <v-app-bar app height="220">
       <v-card elevation="4" v-if="newPrice" height="150" min-width="200">
         <v-card-title>
@@ -7,10 +8,6 @@
         </v-card-title>
         <v-card-text class="text-h5 font-weight-bold">
           <h2>
-            <v-icon x-large :color="direction.color"
-              >{{ direction.icon }}
-            </v-icon>
-
             {{ tweenedPrice || newPrice }}
           </h2>
         </v-card-text>
@@ -26,13 +23,7 @@
           <span class="word-break">Текущая доходность:</span>
         </v-card-title>
         <v-card-text class="text-h5 font-weight-bold">
-          <h2>
-            <v-icon x-large :color="direction.color"
-              >{{ direction.icon }}
-            </v-icon>
-
-            {{ parseFloat(currentROR * 100).toFixed(2) }}%
-          </h2>
+          <h2>{{ parseFloat(currentROR * 100).toFixed(2) }}%</h2>
         </v-card-text>
       </v-card>
       <component
@@ -103,19 +94,17 @@ export default {
   data: function() {
     const chunkSize = 10;
     const firstVal = window.data.slice(0, chunkSize);
-    const rorFirstVal = ror.slice(0, chunkSize);
+
     return {
       initialSliderValue: 2,
       reset: false,
       sliderValue: 100,
-      currentROR: (_.last(firstVal) - window.data[0]) / window.data[0],
-      newPrice: window.data[0],
-      previousPrice: window.data[0],
+      newPrice: _.last(firstVal),
 
       dialog: false,
 
       tweenedPrice: null,
-      counter: 0,
+      counter: chunkSize,
       chunkSize,
       stockIntervall: null,
       tickFrequency: 3,
@@ -158,18 +147,14 @@ export default {
     };
   },
   computed: {
+    currentROR() {
+      return (this.newPrice - window.data[0]) / window.data[0];
+    },
     formattedTween() {
       return this.tweenedPrice.toFixed(2);
     },
     customComp() {
       return comps[`Comp${window.componentNumber}`];
-    },
-    direction() {
-      if (this.currentPrice > this.previousPrice) {
-        return formatUp;
-      } else {
-        return formatDown;
-      }
     },
   },
   watch: {
@@ -184,20 +169,22 @@ export default {
   async mounted() {
     this.$options.sockets.onmessage = (data) => console.log(data);
     this.stockInterval = setInterval(() => {
-      const newCounter = this.counter + this.chunkSize;
-      this.newPrice = window.data[newCounter];
-      const oldCounter = this.counter;
-      this.currentROR = (this.newPrice - window.data[0]) / window.data[0];
-      this.previousPrice = window.data[this.counter];
+      if (!this.dialog) {
+        const newCounter = this.counter + this.chunkSize;
+        this.newPrice = window.data[newCounter];
+        const oldCounter = this.counter;
 
-      const newData = window.data.slice(this.counter, newCounter);
-      this.counter += this.chunkSize;
+        this.previousPrice = window.data[this.counter];
 
-      if (this.newPrice) {
-        this.chartOptions.series[0].data.push(...newData);
-        this.chartOptions.xAxis.plotBands[0].from = oldCounter + this.chunkSize;
-        this.chartOptions.xAxis.plotBands[0].to = newCounter + this.chunkSize;
-      } else document.getElementById("form").submit();
+        const newData = window.data.slice(this.counter, newCounter);
+        this.counter += this.chunkSize;
+
+        if (this.newPrice) {
+          this.chartOptions.series[0].data.push(...newData);
+          this.chartOptions.xAxis.plotBands[0].from = oldCounter;
+          this.chartOptions.xAxis.plotBands[0].to = newCounter;
+        } else document.getElementById("form").submit();
+      }
     }, this.tickFrequency * 1000);
   },
   methods: {

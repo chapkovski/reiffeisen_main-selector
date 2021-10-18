@@ -6,13 +6,14 @@ from pprint import pprint
 
 
 class Instructions(Page):
-    pass
+    def is_displayed(self):
+        return self.round_number==1
 
 
 class Instructions2(Page):
-    pass
-    # def vars_for_template(self):
-    #     return dict(<img src="{{ static 'reif_main-selector/img2high.jpg' }}"/>,  <img src="{{ static 'reif_main-selector/img1low.jpg' }}"/>)
+    def is_displayed(self):
+        return self.round_number == 1
+
 
 
 class Decision(Page):
@@ -30,11 +31,12 @@ class Decision(Page):
 
 class Trade(Page):
     live_method = 'register_event'
-
+    form_model = 'player'
+    form_fields = ['exit_price']
 
 page_sequence = [
-    Instructions,
-    Instructions2,
+    # Instructions,
+    # Instructions2,
     Decision,
     Trade
 ]
