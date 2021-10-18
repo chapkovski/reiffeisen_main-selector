@@ -1,0 +1,59 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Правила игры
+{% endblock %}
+
+{% block content %}
+    <p>
+    Этот эксперимент состоит из 10 одинаковых раундов, каждый из которых будет состоять из нескольких периодов. В начале каждого раунда Вам будет предложено выбрать портфель с определенным уровнем риска и соответствующей ему доходностью.
+    </p>
+    Если Вы выберете портфель с повышенным риском и повышенной доходностью, график его стоимости может выглядеть так
+    </p>
+    <p>
+    <img src="{%  static 'img2high.jpg' %}" />
+    </p>
+    <p>
+    Если Вы выберете портфель с меньшим  риском и меньшей доходностью, график его стоимости может выглядеть так
+    </p>
+    <p>
+    <img src="{% static 'img1low.jpg' %}" />
+    </p>
+    <p>
+    однако конкретные реализации стоимости портфеля каждый раз будут случайными.
+    </p>
+
+    <h3>Выбор портфеля</h3>
+
+    <p>
+    На первой странице Вы увидите ряд подобных графиков с разным уровнем риска. Кликнув на любой из них, Вы сможете наблюдать
+        возможные траектории стоимостей каждого портфеля. Выберите график с уровнем риска, наиболее подходящим для Вас, и нажмите Выбрать.
+    </p>
+    <p>
+        <button type="button" class="btn btn-primary btn-tab" data-offset="1">Далее</button>
+    </p>
+    <!-- {% next_button %} -->
+
+<script>
+
+    let activeTab = 0;
+
+    function showCurrentTabOnly() {
+        let tabIndex = 0;
+        for (let tab of document.getElementsByClassName('tab')) {
+            tab.style.display = tabIndex === activeTab ? 'block' : 'none';
+            tabIndex++;
+        }
+    }
+
+    showCurrentTabOnly();
+    for (let btn of document.getElementsByClassName('btn-tab')) {
+        btn.onclick = function () {
+            activeTab += parseInt(btn.dataset.offset);
+            showCurrentTabOnly();
+        }
+    }
+</script>
+
+{% endblock %}
