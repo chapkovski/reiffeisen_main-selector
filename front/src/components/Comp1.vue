@@ -1,23 +1,25 @@
 <template>
-  <v-card elevation="4" height="150">
-    <v-card-text class="d-flex align-items-center justify-center my-3 ">
+  <v-card elevation="4" height="210">
+    <v-card-text class="d-flex align-items-top justify-center my-6 text-h6 mb-1">
       <div>
         <div>
-          Довольны результатом? Переместите слайдер вправо (макс 100).
-          Недовольны - влево (мин.0).
-        </div>
-        <div>
-          Если хотите продать портфель до срока, переместите слайдер влево до
-          упора (на 0). Вас попросят подтвердить решение.
+          Перемещайте слайдер влево (мин.0) если не удовлетворены результатом,
+          <br>
+          вправо (макс 100) - если удовлетворены.
+          <br>
+          Чтобы продать портфель, переместите слайдер влево до
+          упора (на 0).
+          <br>
+          Вам надо будет подтвердить решение.
         </div>
       </div>
 
       <div
-        class="d-flex align-items-center justify-center my-3"
-        :style="{ height: 150 }"
+        class="d-flex align-items-top justify-top my-auto"
+        :style="{ height: 210 }"
       >
         <round-slider
-          radius="50"
+          radius="90"
           rangeColor="green"
           :value="sliderValue"
           start-angle="315"
