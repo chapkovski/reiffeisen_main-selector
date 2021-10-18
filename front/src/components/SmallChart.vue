@@ -7,6 +7,7 @@
             :constructorType="'stockChart'"
             class="hc"
             :options="chartOptions"
+            :updateArgs="updateArgs"
             ref="priceGraph"
           ></highcharts>
         </v-card-text>
@@ -19,16 +20,19 @@
 import { Chart } from "highcharts-vue";
 import _ from "lodash";
 const _data = _.map(window.data, (i) => i.data);
-const yMin = _.min(_.flattenDeep(_data))
-const yMax = _.max(_.flattenDeep(_data))
+const yMin = _.min(_.flattenDeep(_data));
+const yMax = _.max(_.flattenDeep(_data));
 export default {
   components: {
     highcharts: Chart,
   },
-  props: ["data"],
+  props: ["data", "animated"],
   name: "SmallChart",
   data: function() {
     return {
+      counter: 0,
+      pointer: 0,
+      updateArgs: [true, true, true],
       chartOptions: {
         chart: {
           height: 200,
@@ -40,7 +44,6 @@ export default {
         navigator: {
           enabled: false,
         },
-
         rangeSelector: {
           enabled: false,
         },
@@ -49,38 +52,33 @@ export default {
             enabled: true,
           },
           resize: {
-                enabled: false
-          }, max:yMax, min:yMin,
+            enabled: false,
+          },
           gridLineColor: "transparent",
         },
+        scrollbar: { enabled: false },
         xAxis: {
           visible: false,
           labels: {
             enabled: false,
           },
         },
-        scrollbar: { enabled: false },
-        plotOptions: {
-          series: {
-            animation: false,
-            lineWidth: 1,
-            states: {
-              hover: {
-                enabled: false,
-              },
-            },
-          },
-        },
         series: [
           {
-            data: this.data,
+            data: this.data[0],
           },
         ],
       },
     };
   },
   mounted() {
-    console.debug("ohmygod", this.data);
+    this.stockInterval = setInterval(() => {
+      if (this.animated) {
+        this.counter++;
+        this.pointer = this.counter % this.data.length;
+        this.$refs.priceGraph.chart.series[0].setData(this.data[this.pointer]);
+      }
+    }, 1000);
   },
 
   methods: {},

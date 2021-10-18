@@ -61,16 +61,16 @@ class Player(BasePlayer):
     current_position = models.IntegerField(initial=1)
 
     def chart_generator(self, vol):
-        sizesam = (Constants.steps1, Constants.Npaths)
+        sizesam = (Constants.steps1, 50)
         dift = Constants.T / Constants.steps1
         poi_rv = np.multiply(np.random.poisson(Constants.lam * dift, size=sizesam),
                              np.random.normal(-vol*1.3, Constants.v, size=sizesam)).cumsum(axis=0)
+
         geo = np.cumsum(((Constants.r - (vol) ** 2 / 2
                           - Constants.lam * (-vol*1.3 + Constants.v ** 2 * 0.5)) * dift
                          + vol * np.sqrt(dift) * np.random.normal(size=sizesam)), axis=0)
-
-        dt = np.round_(np.exp(geo + poi_rv) * Constants.S, 3).tolist()
-        data = [j for i in dt for j in i]
+        _dt = np.round_(np.exp(geo + poi_rv) * Constants.S, 3)
+        data = np.transpose(_dt).tolist()
         return data
 
     def merton_jump_paths(self):

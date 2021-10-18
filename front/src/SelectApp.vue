@@ -24,6 +24,7 @@
         <small-chart
           v-for="i in charts"
           :key="i.volatility"
+          :animated='parseFloat(i.volatility)===volatilityValue'
           :data="i.data"
         ></small-chart>
       </v-btn-toggle>
@@ -50,7 +51,7 @@ export default {
   },
   computed: {
     volatilityValue() {
-      if (this.volatility !== null) {
+      if (!(_.isNull(this.volatility)||_.isUndefined(this.volatility))) {
         return window.data[this.volatility].volatility;
       }
     },
