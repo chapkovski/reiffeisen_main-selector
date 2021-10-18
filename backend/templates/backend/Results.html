@@ -2,11 +2,13 @@
 {% load otree static %}
 
 {% block title %}
-    Результаты {% subsession.round_number %} раунда
+    Результаты {{ subsession.round_number }} раунда
 {% endblock %}
 
 {% block content %}
-
+    <div>
+        Ваша выходная цена: {{ player.exit_price }}
+    </div>
     {% next_button %}
 {% endblock %}
 

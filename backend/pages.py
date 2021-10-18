@@ -43,7 +43,8 @@ class Decision(Page):
 
 class Trade(Page):
     live_method = 'register_event'
-
+    form_fields = ['exit_price']
+    form_model = 'player'
 class Results(Page):
     pass
     # def live_method(player, data):
