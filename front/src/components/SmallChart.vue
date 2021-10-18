@@ -19,14 +19,12 @@
 <script>
 import { Chart } from "highcharts-vue";
 import _ from "lodash";
-const _data = _.map(window.data, (i) => i.data);
-const yMin = _.min(_.flattenDeep(_data));
-const yMax = _.max(_.flattenDeep(_data));
+
 export default {
   components: {
     highcharts: Chart,
   },
-  props: ["data", "animated"],
+  props: ["data", "animated",'yMin', 'yMax'],
   name: "SmallChart",
   data: function() {
     return {
@@ -51,6 +49,7 @@ export default {
           labels: {
             enabled: true,
           },
+          min:this.yMin,max:this.yMax,
           resize: {
             enabled: false,
           },

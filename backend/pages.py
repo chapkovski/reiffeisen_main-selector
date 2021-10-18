@@ -35,8 +35,8 @@ class Trade(Page):
     form_fields = ['exit_price']
 
 page_sequence = [
-    # Instructions,
-    # Instructions2,
+    Instructions,
+    Instructions2,
     Decision,
     Trade
 ]

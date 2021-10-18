@@ -26,6 +26,8 @@
           :key="i.volatility"
           :animated='parseFloat(i.volatility)===volatilityValue'
           :data="i.data"
+          :yMin='yMin'
+          :yMax='yMax'
         ></small-chart>
       </v-btn-toggle>
     </v-main>
@@ -37,6 +39,9 @@
 
 import SmallChart from "./components/SmallChart";
 import _ from "lodash";
+const _data = _.map(window.data, (i) => i.data);
+const yMin = _.min(_.flattenDeep(_data));
+const yMax = _.max(_.flattenDeep(_data));
 
 export default {
   name: "SelectApp",
@@ -47,6 +52,8 @@ export default {
     return {
       charts: window.data,
       volatility: null,
+      yMin,
+      yMax
     };
   },
   computed: {
