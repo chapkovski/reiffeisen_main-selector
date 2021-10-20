@@ -34,10 +34,16 @@ SESSION_CONFIGS = [
         name='prototype5',
         display_name="prototype 5 - combo",
         num_demo_participants=1,
-        app_sequence=['backend'],
+        app_sequence=['backend', 'reif_survey_0'],
         component_number=4,
-
     ),
+    dict(
+        name='reif_survey_0',
+        display_name="reif_survey_0",
+        num_demo_participants=1,
+        app_sequence=['reif_survey_0'],
+    ),
+
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

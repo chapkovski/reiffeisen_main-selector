@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Анкета часть 3 из 5
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        4. Какими финансовыми продуктами и услугами Вы пользуетесь в настоящее время? (выберите все подходящие варианты)
+    </p>
+
+    {% for field in form %}
+        {% formfield field %}
+    {% endfor %}
+
+    {% next_button %}
+
+{% endblock %}

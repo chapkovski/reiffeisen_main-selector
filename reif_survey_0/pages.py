@@ -6,19 +6,45 @@ from .models import Constants
 
 class invest(Page):
     form_model = 'player'
-    form_fields = ['norm1_iis',
-                   'norm2_horiz',
-                   'norm3_goals',
-                   'norm3a_goals',
-                   'norm4_withdraw',
-                   'norm5_shareinv',
-                   'norm6_invstrat',
-                   'norm6a_invstrat',
+    form_fields = ['fb1_clarity',
+                   'fb2_strategy',
+                   'fb3_dropdown',
+                   ]
+
+class finprodnow(Page):
+    form_model = 'player'
+    form_fields = [
+                   'debcard1',
+                   'credcard1',
+                   'conscred1',
+                   'mortgcred1',
+                   'bankacc1',
+                   'bankdepo1',
+                   'bankinv1',
+                   'invest1',
+        ]
+
+class finprodfut(Page):
+        form_model = 'player'
+        form_fields = [
+                   'debcard2',
+                   'credcard2',
+                   'conscred2',
+                   'mortgcred2',
+                   'bankacc2',
+                   'bankdepo2',
+                   'bankinv2',
+                   'invest2',
+            ]
+
+class prefs(Page):
+    form_model = 'player'
+    form_fields = [
+                   'inv_horiz',
                    'norm7_know',
                    'norm8_risk',
                    'norm9_debt',
-                   'norm10_exper',
-                   'norm10a_exper',
+                   'norm10_saving',
                    'norm11_invlott',
                    'norm11down_invlott',
                    'norm11up_invlott',
@@ -39,7 +65,6 @@ class MyPage(Page):
         'income',
         'budget',
         'budget_other',
-        'decision',
         'satis',
         'expect',
         'trust',
@@ -49,7 +74,9 @@ class MyPage(Page):
     def before_next_page(self):
         self.player.set_payoff()
 
+class Results_Toloka(Page):
+    pass
 
 page_sequence = [
-    invest, MyPage, #, Yourself #, polit, City,
+    invest, finprodnow, finprodfut, prefs, MyPage, Results_Toloka, #, Yourself #, polit, City,
 ]

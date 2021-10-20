@@ -122,5 +122,5 @@ page_sequence = [
     Trade,
     Results,
     ResultsWaitPage,
-    FinalResults
+    FinalResults,
 ]

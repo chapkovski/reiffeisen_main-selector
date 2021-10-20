@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %}
+    Анкета часть 2 из 5
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        5. Какими финансовыми продуктами и услугами Вы планируете начать пользоваться в обозримом будущем? (выберите все подходящие варианты)
+    </p>
+
+    {% for field in form %}
+        {% formfield field %}
+    {% endfor %}
+
+    {% next_button %}
+
+{% endblock %}
