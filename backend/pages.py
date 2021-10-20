@@ -11,7 +11,7 @@ class Intro(Page):
         return self.subsession.round_number == 1
 
 
-class Instructions(Page):
+class Instructions_slider(Page):
 #    @staticmethod
     def is_displayed(self):
         return self.subsession.round_number == 1
@@ -39,14 +39,47 @@ class Decision(Page):
     def before_next_page(self):
         self.player.generate_data()
 
+#    @staticmethod
+#    def before_next_page(self):
+
 
 
 class Trade(Page):
     live_method = 'register_event'
     form_fields = ['exit_price']
     form_model = 'player'
+
+    # def before_next_page(self):
+    #     import random
+    #
+    #     participant = self.player.participant
+    #     if self.player.round_number == Constants.num_rounds:
+    #         random_round = random.randint(1, Constants.num_rounds)
+    #         self.participant.selected_round = random_round
+    #         player_in_selected_round = self.player.in_round(random_round)
+    #         self.player.payoff = player_in_selected_round.player.exit_price
+
+            # participant.selected_round = random_round
+            # player_in_selected_round = player.in_round(random_round)
+            # player.payoff = Constants.endowment - player_in_selected_round.give_amount
+
+#     def creating_session(self):
+#         import random
+# #        participant = self.player.participant
+#         if self.round_number == 1:
+#             self.player.random_round = random.randint(1, Constants.num_rounds)
+#             self.player.selected_round = self.player.random_round
+#             self.player.player_in_selected_round = self.player.in_round(self.player.random_round)
+#             self.player.payoff = self.player.exit_price
+#             self.session.vars['paying_round'] = self.player.random_round
+
+
+
 class Results(Page):
-    pass
+    def vars_for_template(self):
+        player = self.player
+        ratofret = round((self.player.exit_price - Constants.S)/Constants.S, 4)
+        return dict(ratofret=ratofret)
     # def live_method(player, data):
     #     t = data['type']
     #     if t == 'offer':
@@ -58,12 +91,36 @@ class Results(Page):
     #             }
     #         return {other_player: response}
 
+class ResultsWaitPage(WaitPage):
+    def is_displayed(self):
+        return self.player.round_number == Constants.num_rounds
+
+    def before_next_page(self):
+        self.player.set_payoff()
+
+class FinalResults(Page):
+#    @staticmethod
+
+    def is_displayed(self):
+        return self.player.round_number == Constants.num_rounds
+
+#    @property
+    def vars_for_template(self):
+        paying_round = self.subsession.session.vars['paying_round']
+        final_payoff = self.player.final_payoff #in_round(self.player.paying_round).exit_price
+        return dict(pay_round=paying_round, final_payoff=final_payoff)
+
+
+
+
 page_sequence = [
     Intro,
-    Instructions,
+    Instructions_slider,
 #    Instructions1,
 #    Instructions2,
     Decision,
     Trade,
     Results,
+    ResultsWaitPage,
+    FinalResults
 ]

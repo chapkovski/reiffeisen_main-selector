@@ -10,7 +10,7 @@
         color="red"
         @click="showIntentionSlider = true"
         v-show="!showIntentionSlider"
-        >Обдумываю возможность продажи</v-btn
+        >Возможно, продать</v-btn
       >
       <div v-show="showIntentionSlider">
         <v-slider
@@ -20,7 +20,7 @@
           :max="3"
           step="1"
           ticks="always"
-          tick-size="20"
+          tick-size="10"
           :thumb-size="70"
           @change="changeSliderValue"
         />

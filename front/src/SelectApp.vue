@@ -1,8 +1,10 @@
 <template>
   <v-app>
     <v-app-bar app fixed>
-      <div>Выберите уровень риска согласно Вашим предпочтениям.
-         Помните что все графики приблизительны: фактическая стоимость Вашего портфеля будет всегда разной. </div>
+      <div>
+        Для просмотра типичных траекторий при каждом уровне риска нажмите на график. Помните что все графики ориентировочны:
+        <br>
+          фактическая стоимость Вашего портфеля будет всегда разной. Выберите предпочтительный график и нажмите Выбрать </div>
       <div>
         <v-card class='mx-3'><v-card-text>
           Выбранный уровень риска: {{ volatilityValue }}</v-card-text></v-card>
@@ -40,7 +42,7 @@ import SmallChart from "./components/SmallChart";
 import _ from "lodash";
 const _data = _.map(window.data, (i) => i.data);
 const yMin = _.min(_.flattenDeep(_data));
-const yMax = _.max(_.flattenDeep(_data));
+const yMax = _.max(_.flattenDeep(_data))*0.5;
 
 export default {
   name: "SelectApp",

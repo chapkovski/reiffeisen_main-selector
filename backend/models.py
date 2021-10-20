@@ -35,7 +35,7 @@ class Constants(BaseConstants):
 
     S = 100  # current stock price
     T = 1  # time to maturity
-    lam = 1  # intensity of jump i.e. number of jumps per annum
+    lam = 1.5  # intensity of jump i.e. number of jumps per annum
     steps = 250  # time steps
     steps1 = 75
     Npaths = 1  # number of paths to simulate
@@ -46,11 +46,19 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass
+    paying_round = models.IntegerField()
 
+    def creating_session(self):
+        if self.round_number == 1:
+            paying_round = random.randint(1, Constants.num_rounds)
+            self.session.vars['paying_round'] = paying_round
 
 class Group(BaseGroup):
     pass
+
+#
+# class Participant(BasePlayer):
+#     select_round = models.IntegerField()
 
 
 class Player(BasePlayer):
@@ -59,15 +67,18 @@ class Player(BasePlayer):
     drawdown = models.FloatField(min=2, max=4, initial=3)
     data = models.LongStringField()
     current_position = models.IntegerField(initial=1)
-    exit_price=models.FloatField()
+    exit_price = models.FloatField()
+    final_payoff = models.FloatField()
+    paying_round = models.IntegerField()
+
     def chart_generator(self, vol):
         sizesam = (Constants.steps1, 50)
         dift = Constants.T / Constants.steps1
         poi_rv = np.multiply(np.random.poisson(Constants.lam * dift, size=sizesam),
-                             np.random.normal(-vol*1.3, Constants.v, size=sizesam)).cumsum(axis=0)
+                             np.random.normal(-vol * 1.3, Constants.v, size=sizesam)).cumsum(axis=0)
 
         geo = np.cumsum(((Constants.r - (vol) ** 2 / 2
-                          - Constants.lam * (-vol*1.3 + Constants.v ** 2 * 0.5)) * dift
+                          - Constants.lam * (-vol * 1.3 + Constants.v ** 2 * 0.5)) * dift
                          + vol * np.sqrt(dift) * np.random.normal(size=sizesam)), axis=0)
         _dt = np.round_(np.exp(geo + poi_rv) * Constants.S, 3)
         data = np.transpose(_dt).tolist()
@@ -110,6 +121,9 @@ class Player(BasePlayer):
         return {
             self.id_in_group: dict(timestamp=timestamp.strftime('%m_%d_%Y_%H_%M_%S'), action='getServerConfirmation')}
 
+    def set_payoff(self):
+        self.paying_round = self.session.vars['paying_round']
+        self.final_payoff = self.player.in_round(self.player.paying_round).exit_price()
 
 class Event(djmodels.Model):
     class Meta:

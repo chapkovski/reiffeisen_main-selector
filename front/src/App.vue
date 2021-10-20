@@ -126,7 +126,7 @@ export default {
           min: window.data[0] - (window.data[0] - window.drawdown) * 2,
           plotLines: [
             {
-              value: window.drawdown,
+              value: 100,
               color: "red",
               width: 2,
               dashStyle: "shortdash",

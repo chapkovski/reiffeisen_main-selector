@@ -2,12 +2,20 @@
 {% load otree static %}
 
 {% block title %}
-    Результаты {{ subsession.round_number }} раунда
+    Результаты  раунда {{ subsession.round_number }} из {{ Constants.num_rounds }}
 {% endblock %}
 
 {% block content %}
     <div>
-        Ваша выходная цена: {{ player.exit_price }}
+        <p>
+        Вы инвестировали {{ Constants.S }}
+        </p>
+        <p>
+        По итогам раунда Вы получили {{ player.exit_price }}
+        </p>
+        <p>
+        Доходность Вашей инвестиции составила {{ratofret}}
+        </p>
     </div>
     {% next_button %}
 {% endblock %}

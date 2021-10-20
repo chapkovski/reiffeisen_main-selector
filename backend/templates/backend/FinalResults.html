@@ -1,0 +1,15 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Результаты эксперимента
+{% endblock %}
+
+{% block content %}
+    <div>
+        За случайно выбранный раунд {{ pay_round }} Вы заработали {{ player.final_payoff }}
+    </div>
+    {% next_button %}
+{% endblock %}
+
+
