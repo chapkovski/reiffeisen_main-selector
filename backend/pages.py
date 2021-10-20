@@ -49,6 +49,9 @@ class Trade(Page):
     form_fields = ['exit_price']
     form_model = 'player'
 
+    def before_next_page(self):
+        if self.round_number == Constants.num_rounds:
+            self.player.set_payoff()
     # def before_next_page(self):
     #     import random
     #
@@ -80,6 +83,7 @@ class Results(Page):
         player = self.player
         ratofret = round((self.player.exit_price - Constants.S)/Constants.S, 4)
         return dict(ratofret=ratofret)
+
     # def live_method(player, data):
     #     t = data['type']
     #     if t == 'offer':
@@ -91,12 +95,11 @@ class Results(Page):
     #             }
     #         return {other_player: response}
 
-class ResultsWaitPage(WaitPage):
+
+class NextPage(Page):
     def is_displayed(self):
         return self.player.round_number == Constants.num_rounds
 
-    def before_next_page(self):
-        self.player.set_payoff()
 
 class FinalResults(Page):
 #    @staticmethod
@@ -121,6 +124,6 @@ page_sequence = [
     Decision,
     Trade,
     Results,
-    ResultsWaitPage,
+    NextPage,
     FinalResults,
 ]

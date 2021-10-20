@@ -123,7 +123,7 @@ class Player(BasePlayer):
 
     def set_payoff(self):
         self.paying_round = self.session.vars['paying_round']
-        self.final_payoff = self.player.in_round(self.player.paying_round).exit_price()
+        self.final_payoff = self.in_round(self.paying_round).exit_price
 
 class Event(djmodels.Model):
     class Meta:
