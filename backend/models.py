@@ -54,8 +54,10 @@ class Subsession(BaseSubsession):
             paying_round = random.randint(1, Constants.num_rounds)
             self.session.vars['paying_round'] = paying_round
 
+
 class Group(BaseGroup):
     pass
+
 
 #
 # class Participant(BasePlayer):
@@ -118,7 +120,8 @@ class Player(BasePlayer):
             name=data.pop('name', ''),
             body=json.dumps(data),
             current_price=data.get('currentPrice'),
-            slider_value=data.get('sliderValue'),
+            price_index=data.get('currentPrice'),
+            slider_value=data.get('priceIndex'),
             secs_since_round_starts=data.get('secs_since_round_starts'),
         )
 
@@ -128,7 +131,8 @@ class Player(BasePlayer):
     def set_payoff(self):
         self.paying_round = self.session.vars['paying_round']
         self.final_payoff = self.in_round(self.paying_round).exit_price
-        self.payoff= self.final_payoff
+        self.payoff = self.final_payoff
+
 
 class Event(djmodels.Model):
     class Meta:
@@ -140,6 +144,7 @@ class Event(djmodels.Model):
     timestamp = djmodels.DateTimeField(null=True, blank=True)
     unix_timestamp = models.IntegerField()
     body = models.StringField()
-    current_price=models.FloatField()
-    slider_value=models.IntegerField()
-    secs_since_round_starts=models.IntegerField()
+    current_price = models.FloatField()
+    price_index = models.IntegerField()
+    slider_value = models.IntegerField()
+    secs_since_round_starts = models.IntegerField()

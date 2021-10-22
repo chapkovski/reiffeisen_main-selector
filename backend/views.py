@@ -21,7 +21,7 @@ class PandasExport(View):
         events = Event.objects.all().values('owner__participant__code', 'owner__session__code', 'owner__round_number', 'owner__volatility',
                                             'name', 'timestamp', 'unix_timestamp',
                                             'secs_since_round_starts',
-                                            'body', 'current_price', 'slider_value')
+                                            'body', 'current_price', 'price_index','slider_value')
         df = pd.DataFrame(data=events)
         if df is not None and not df.empty:
             timestamp = timezone.now()
