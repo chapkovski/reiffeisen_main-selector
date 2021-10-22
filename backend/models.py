@@ -8,6 +8,7 @@ from otree.api import (
     Currency as c,
     currency_range,
 )
+from django.utils.dateformat import format
 from django.utils import timezone
 from django.db import models as djmodels
 import numpy as np
@@ -111,11 +112,14 @@ class Player(BasePlayer):
         timestamp = timezone.now()
 
         self.events.create(
-
             owner=self,
             timestamp=timestamp,
+            unix_timestamp=format(timestamp, 'U'),
             name=data.pop('name', ''),
             body=json.dumps(data),
+            current_price=data.get('currentPrice'),
+            slider_value=data.get('sliderValue'),
+            secs_since_round_starts=data.get('secs_since_round_starts'),
         )
 
         return {
@@ -134,4 +138,8 @@ class Event(djmodels.Model):
     owner = djmodels.ForeignKey(to=Player, on_delete=djmodels.CASCADE, related_name='events')
     name = models.StringField()
     timestamp = djmodels.DateTimeField(null=True, blank=True)
+    unix_timestamp = models.IntegerField()
     body = models.StringField()
+    current_price=models.FloatField()
+    slider_value=models.IntegerField()
+    secs_since_round_starts=models.IntegerField()

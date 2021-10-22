@@ -69,6 +69,7 @@ import ConfirmDialog from "./components/ConfirmDialog";
 import Comp2 from "./components/Comp2";
 import Comp3 from "./components/Comp3";
 import Comp4 from "./components/Comp4";
+import { differenceInSeconds } from "date-fns";
 const comps = { Comp1, Comp2, Comp3, Comp4 };
 import gsap from "gsap";
 import _ from "lodash";
@@ -96,6 +97,9 @@ export default {
     const firstVal = window.data.slice(0, chunkSize);
 
     return {
+      startTime: new Date(),
+      endTime: null,
+      timeSpent: null,
       initialSliderValue: 2,
       reset: false,
       sliderValue: 100,
@@ -190,7 +194,16 @@ export default {
   methods: {
     async sendMessage(obj) {
       if (this.$socket.readyState == 1) {
-        await this.$socket.sendObj(obj);
+        const inj = {
+          currentPrice: this.newPrice,
+          priceIndex: this.counter,
+          secs_since_round_starts: differenceInSeconds(
+            new Date(),
+            this.startTime
+          ),
+        };
+   
+        await this.$socket.sendObj( { ...obj, ...inj });
       }
     },
     tweenUpd(v) {
@@ -203,14 +216,12 @@ export default {
       await this.sendMessage({
         name: "slider value changed",
         sliderValue: val,
-        currentPrice: this.newPrice,
       });
 
       this.sliderValue = val;
       if (val == 0) {
         await this.sendMessage({
           name: "show confirming dialog",
-          currentPrice: this.newPrice,
         });
         this.dialog = true;
       }
@@ -219,7 +230,6 @@ export default {
     async continueKeeping() {
       await this.sendMessage({
         name: "Continue keeping",
-        currentPrice: this.newPrice,
       });
       this.sliderValue = 100;
       this.dialog = false;
@@ -227,7 +237,7 @@ export default {
       this.initialSliderValue = 2;
     },
     async sell() {
-      await this.sendMessage({ name: "Sell", currentPrice: this.newPrice });
+      await this.sendMessage({ name: "Sell" });
       this.dialog = false;
       document.getElementById("form").submit();
     },

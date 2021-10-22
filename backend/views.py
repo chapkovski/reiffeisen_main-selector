@@ -18,7 +18,10 @@ class PandasExport(View):
     content_type = 'text/csv'
 
     def get(self, request, *args, **kwargs):
-        events = Event.objects.all().values('owner__participant__code', 'owner__session__code', 'owner__round_number', 'name', 'timestamp', 'body', )
+        events = Event.objects.all().values('owner__participant__code', 'owner__session__code', 'owner__round_number', 'owner__volatility',
+                                            'name', 'timestamp', 'unix_timestamp',
+                                            'secs_since_round_starts',
+                                            'body', 'current_price', 'slider_value')
         df = pd.DataFrame(data=events)
         if df is not None and not df.empty:
             timestamp = timezone.now()
