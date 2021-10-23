@@ -120,8 +120,8 @@ class Player(BasePlayer):
             name=data.pop('name', ''),
             body=json.dumps(data),
             current_price=data.get('currentPrice'),
-            price_index=data.get('currentPrice'),
-            slider_value=data.get('priceIndex'),
+            price_index=data.get('priceIndex'),
+            slider_value=data.get('sliderValue'),
             secs_since_round_starts=data.get('secs_since_round_starts'),
         )
 
