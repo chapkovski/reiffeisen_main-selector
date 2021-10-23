@@ -3,16 +3,17 @@
 
 {% block title %}
 
-    Раунд {{  subsession.round_number }} из {{  Constants.num_rounds }}
+    Раунд {{ subsession.round_number }} из {{ Constants.num_rounds }}
 {% endblock %}
 
 
 {% block body_main %}
- 
+
     <link rel="stylesheet" href="{% static 'front/css/chunk-vendors.css' %}">
     <link rel="stylesheet" href="{% static 'front/css/selector.css' %}">
     <script>
-    window.data={{ data|json }}
+        window.data ={{ data|json }};
+        window.socket_path = {{ view.live_url|json }};
     </script>
     <form action='' method="post" role="form" id="form" autocomplete="off">
         {% csrf_token %}

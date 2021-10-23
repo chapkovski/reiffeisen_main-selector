@@ -123,6 +123,7 @@ class Player(BasePlayer):
             price_index=data.get('priceIndex'),
             slider_value=data.get('sliderValue'),
             secs_since_round_starts=data.get('secs_since_round_starts'),
+            volatility=data.get('volatility')
         )
 
         return {
@@ -148,3 +149,4 @@ class Event(djmodels.Model):
     price_index = models.IntegerField()
     slider_value = models.IntegerField()
     secs_since_round_starts = models.IntegerField()
+    volatility = models.FloatField()

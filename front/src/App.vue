@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <input type="hidden" :value="newPrice" name="exit_price" />
+    <input type="hidden" :value="currentPrice" name="exit_price" />
     <v-app-bar app height="220">
       <v-card elevation="4" v-if="newPrice" height="150" min-width="200">
         <v-card-title>
@@ -97,6 +97,7 @@ export default {
     const firstVal = window.data.slice(0, chunkSize);
 
     return {
+      submittable: false,
       startTime: new Date(),
       endTime: null,
       timeSpent: null,
@@ -151,6 +152,9 @@ export default {
     };
   },
   computed: {
+    currentPrice() {
+      return _.last(this.chartOptions.series[0].data);
+    },
     currentROR() {
       return (this.newPrice - window.data[0]) / window.data[0];
     },
@@ -162,6 +166,12 @@ export default {
     },
   },
   watch: {
+    async submittable(val) {
+      if (val) {
+        await this.sendMessage({ name: "Trade_ends" });
+        document.getElementById("form").submit();
+      }
+    },
     newPrice: function(newValue) {
       gsap.to(this.$data, {
         duration: 0.5,
@@ -170,9 +180,13 @@ export default {
       });
     },
   },
-  async mounted() {
+  async created() {
+    this.$options.sockets.onopen = async () =>
+      await this.sendMessage({ name: "Trade_starts" });
     this.$options.sockets.onmessage = (data) => console.log(data);
-    this.stockInterval = setInterval(() => {
+  },
+  async mounted() {
+    this.stockInterval = setInterval(async () => {
       if (!this.dialog) {
         const newCounter = this.counter + this.chunkSize;
         this.newPrice = window.data[newCounter];
@@ -187,23 +201,25 @@ export default {
           this.chartOptions.series[0].data.push(...newData);
           this.chartOptions.xAxis.plotBands[0].from = oldCounter;
           this.chartOptions.xAxis.plotBands[0].to = newCounter;
-        } else document.getElementById("form").submit();
+        } else {
+          this.submittable = true;
+        }
       }
-    }, this.tickFrequency * 1000);
+    }, 1000);
   },
   methods: {
     async sendMessage(obj) {
       if (this.$socket.readyState == 1) {
         const inj = {
-          currentPrice: this.newPrice,
+          currentPrice: this.currentPrice,
           priceIndex: this.counter,
           secs_since_round_starts: differenceInSeconds(
             new Date(),
             this.startTime
           ),
         };
-   
-        await this.$socket.sendObj( { ...obj, ...inj });
+
+        await this.$socket.sendObj({ ...obj, ...inj });
       }
     },
     tweenUpd(v) {
@@ -239,7 +255,7 @@ export default {
     async sell() {
       await this.sendMessage({ name: "Sell" });
       this.dialog = false;
-      document.getElementById("form").submit();
+      this.submittable = true;
     },
   },
 };
