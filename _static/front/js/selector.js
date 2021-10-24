@@ -113,7 +113,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "b9d8ba238a26fc7e084a";
+/******/ 	var hotCurrentHash = "e1b3358f2a188b437110";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1152,13 +1152,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Use
 
 /***/ 3:
 /*!*************************************************************************************************************************************!*\
-  !*** multi (webpack)/hot/dev-server.js (webpack)-dev-server/client?http://172.20.10.4:8080&sockPath=/sockjs-node ./src/selector.js ***!
+  !*** multi (webpack)/hot/dev-server.js (webpack)-dev-server/client?http://172.20.10.4:8081&sockPath=/sockjs-node ./src/selector.js ***!
   \*************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /Users/philippchapkovski/Documents/raif_project/selector/front/node_modules/webpack/hot/dev-server.js */"./node_modules/webpack/hot/dev-server.js");
-__webpack_require__(/*! /Users/philippchapkovski/Documents/raif_project/selector/front/node_modules/webpack-dev-server/client/index.js?http://172.20.10.4:8080&sockPath=/sockjs-node */"./node_modules/webpack-dev-server/client/index.js?http://172.20.10.4:8080&sockPath=/sockjs-node");
+__webpack_require__(/*! /Users/philippchapkovski/Documents/raif_project/selector/front/node_modules/webpack-dev-server/client/index.js?http://172.20.10.4:8081&sockPath=/sockjs-node */"./node_modules/webpack-dev-server/client/index.js?http://172.20.10.4:8081&sockPath=/sockjs-node");
 module.exports = __webpack_require__(/*! /Users/philippchapkovski/Documents/raif_project/selector/front/src/selector.js */"./src/selector.js");
 
 

@@ -86,6 +86,14 @@ const formatUp = {
   icon: "mdi-arrow-up-bold",
 };
 
+function sd(array) {
+  const n = array.length;
+  const mean = array.reduce((a, b) => a + b) / n;
+  return Math.sqrt(
+    array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
+  );
+}
+
 export default {
   name: "App",
   components: {
@@ -97,6 +105,7 @@ export default {
     const firstVal = window.data.slice(0, chunkSize);
 
     return {
+      previousChunk: firstVal,
       submittable: false,
       startTime: new Date(),
       endTime: null,
@@ -188,6 +197,10 @@ export default {
   async mounted() {
     this.stockInterval = setInterval(async () => {
       if (!this.dialog) {
+        this.previousChunk = window.data.slice(
+          this.counter - this.chunkSize,
+          this.counter
+        );
         const newCounter = this.counter + this.chunkSize;
         this.newPrice = window.data[newCounter];
         const oldCounter = this.counter;
@@ -198,6 +211,7 @@ export default {
         this.counter += this.chunkSize;
 
         if (this.newPrice) {
+          this.checkForSharpChanges(newData, oldCounter);
           this.chartOptions.series[0].data.push(...newData);
           this.chartOptions.xAxis.plotBands[0].from = oldCounter;
           this.chartOptions.xAxis.plotBands[0].to = newCounter;
@@ -205,9 +219,28 @@ export default {
           this.submittable = true;
         }
       }
-    }, 1000);
+    }, this.tickFrequency * 2000);
   },
   methods: {
+    checkForSharpChanges(data, startPosition) {
+      const mean = _.mean(this.previousChunk);
+      const std = sd(this.previousChunk);
+      const that = this;
+      _.forEach(data,  function(v, k) {
+        const normalizedValue = Math.abs((v - mean) / std);
+        if (normalizedValue > 15) {
+          const msg = {
+            name: "sharpChangeDetected",
+            value: v,
+            position: k + startPosition,
+          };
+          that.sendMessage(msg);
+          return false;
+
+
+        }
+      });
+    },
     async sendMessage(obj) {
       if (this.$socket.readyState == 1) {
         const inj = {
