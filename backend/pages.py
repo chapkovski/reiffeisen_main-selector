@@ -72,8 +72,8 @@ class FinalResults(Page):
 
 
 page_sequence = [
-    # Intro,
-    # Instructions_slider,
+    Intro,
+    Instructions_slider,
 #    Instructions1,
 #    Instructions2,
     Decision,

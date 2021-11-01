@@ -48,7 +48,7 @@ import SmallChart from "./components/SmallChart";
 import _ from "lodash";
 const _data = _.map(window.data, (i) => i.data);
 const yMin = _.min(_.flattenDeep(_data));
-const yMax = _.max(_.flattenDeep(_data)) * 0.5;
+const yMax = _.max(_.flattenDeep(_data)) * 0.25;
 
 export default {
   name: "SelectApp",

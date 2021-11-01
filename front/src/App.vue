@@ -219,7 +219,7 @@ export default {
           this.submittable = true;
         }
       }
-    }, this.tickFrequency * 2000);
+    }, this.tickFrequency * 1750);
   },
   methods: {
     checkForSharpChanges(data, startPosition) {

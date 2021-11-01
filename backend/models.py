@@ -36,15 +36,14 @@ class Constants(BaseConstants):
 
     S = 100  # current stock price
     T = 1  # time to maturity
-    lam = 1.5  # intensity of jump i.e. number of jumps per annum
+    lam = 2  # intensity of jump i.e. number of jumps per annum
     steps = 250  # time steps
     steps1 = 75
     Npaths = 1  # number of paths to simulate
     sigma = .48  # annual standard deviation , for wiener process
     m = -0.02  # mean of jump size
     r = 0.06  # risk free rate
-    v = 0.3  # sigma / 10  # standard deviation of jump
-
+    v = 0.03  # sigma / 10  # standard deviation of jump
 
 class Subsession(BaseSubsession):
     paying_round = models.IntegerField()
@@ -54,15 +53,8 @@ class Subsession(BaseSubsession):
             paying_round = random.randint(1, Constants.num_rounds)
             self.session.vars['paying_round'] = paying_round
 
-
 class Group(BaseGroup):
     pass
-
-
-#
-# class Participant(BasePlayer):
-#     select_round = models.IntegerField()
-
 
 class Player(BasePlayer):
     income = models.FloatField(min=3, max=25)
@@ -78,10 +70,10 @@ class Player(BasePlayer):
         sizesam = (Constants.steps1, 50)
         dift = Constants.T / Constants.steps1
         poi_rv = np.multiply(np.random.poisson(Constants.lam * dift, size=sizesam),
-                             np.random.normal(-vol * 1.3, Constants.v, size=sizesam)).cumsum(axis=0)
+                             np.random.normal(-vol * 3, Constants.v, size=sizesam)).cumsum(axis=0)
 
         geo = np.cumsum(((Constants.r - (vol) ** 2 / 2
-                          - Constants.lam * (-vol * 1.3 + Constants.v ** 2 * 0.5)) * dift
+                          - Constants.lam * (-vol * 2 + Constants.v ** 2 * 0.5)) * dift
                          + vol * np.sqrt(dift) * np.random.normal(size=sizesam)), axis=0)
         _dt = np.round_(np.exp(geo + poi_rv) * Constants.S, 3)
         data = np.transpose(_dt).tolist()
@@ -91,9 +83,9 @@ class Player(BasePlayer):
         size = (Constants.steps, Constants.Npaths)
         dift = Constants.T / Constants.steps
         poi_rv = np.multiply(np.random.poisson(Constants.lam * dift, size=size),
-                             np.random.normal(-self.volatility * 1.3, Constants.v, size=size)).cumsum(axis=0)
+                             np.random.normal(-self.volatility * 3, Constants.v, size=size)).cumsum(axis=0)
         geo = np.cumsum(((Constants.r - (self.volatility) ** 2 / 2
-                          - Constants.lam * (-(self.volatility) * 1.3 + Constants.v ** 2 * 0.5)) * dift
+                          - Constants.lam * (-(self.volatility) * 2 + Constants.v ** 2 * 0.5)) * dift
                          + self.volatility * np.sqrt(dift) * np.random.normal(size=size)), axis=0)
 
         return np.round_(np.exp(geo + poi_rv) * Constants.S, 3).tolist()

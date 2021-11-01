@@ -40,6 +40,8 @@ class finprodfut(Page):
 class prefs(Page):
     form_model = 'player'
     form_fields = [
+                   'invgoals',
+                   'invgoals_other',
                    'inv_horiz',
                    'norm7_know',
                    'norm8_risk',
