@@ -45,6 +45,7 @@ class Constants(BaseConstants):
     r = 0.06  # risk free rate
     v = 0.03  # sigma / 10  # standard deviation of jump
 
+
 class Subsession(BaseSubsession):
     paying_round = models.IntegerField()
 
@@ -53,8 +54,10 @@ class Subsession(BaseSubsession):
             paying_round = random.randint(1, Constants.num_rounds)
             self.session.vars['paying_round'] = paying_round
 
+
 class Group(BaseGroup):
     pass
+
 
 class Player(BasePlayer):
     income = models.FloatField(min=3, max=25)
@@ -102,7 +105,6 @@ class Player(BasePlayer):
         return Constants.S * (1 - self.drawdown / 10)
 
     def register_event(self, data):
-        print('WE GET THE DATA', data)
         timestamp = timezone.now()
 
         self.events.create(

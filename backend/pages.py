@@ -6,7 +6,7 @@ from pprint import pprint
 
 
 class Intro(Page):
-#    @staticmethod
+
     def is_displayed(self):
         return self.subsession.round_number == 1
 
@@ -57,12 +57,10 @@ class NextPage(Page):
 
 
 class FinalResults(Page):
-#    @staticmethod
-
     def is_displayed(self):
         return self.player.round_number == Constants.num_rounds
 
-#    @property
+
     def vars_for_template(self):
         paying_round = self.subsession.session.vars['paying_round']
         final_payoff = self.player.final_payoff #in_round(self.player.paying_round).exit_price
